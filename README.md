@@ -1,0 +1,2 @@
+# ClinicManagementProject
+a console application
