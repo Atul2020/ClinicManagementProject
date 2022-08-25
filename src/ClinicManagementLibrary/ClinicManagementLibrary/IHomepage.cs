@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace ClinicManagementLibrary
 {
-    internal interface IHomepage
+    public interface IHomepage
     {
+         List<Doctor> viewDoctorDetails();
+
+        void addPatientDetails(Patient p);
+
+        bool validatePatientDetails(Patient p,string dob);
+
+        List<Doctor> displayDoctorBySpecialization(string spec);
     }
 }
