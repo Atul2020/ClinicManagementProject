@@ -1,0 +1,9 @@
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\bin\Debug\ClinicManagementLibrary.dll
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\bin\Debug\ClinicManagementLibrary.pdb
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\bin\Debug\System.Data.SqlClient.dll
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\bin\Debug\System.Data.SqlClient.xml
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\obj\Debug\ClinicManagementLibrary.csproj.AssemblyReference.cache
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\obj\Debug\ClinicManagementLibrary.csproj.CoreCompileInputs.cache
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\obj\Debug\ClinicManagementLibrary.csproj.CopyComplete
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\obj\Debug\ClinicManagementLibrary.dll
+C:\Users\ADMIN\Desktop\ClinicManagementProject\src\ClinicManagementLibrary\ClinicManagementLibrary\obj\Debug\ClinicManagementLibrary.pdb
