@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//Doctor class with its constructors
 namespace ClinicManagementLibrary
 {
     public class Doctor

@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//User class with its constructors
 namespace ClinicManagementLibrary
 {
     public class User
     {
-        string username { get; set; }
-        string password { get; set; }
-        string firstName { get; set; }
-        string lastName { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
         
         public User()
         {
