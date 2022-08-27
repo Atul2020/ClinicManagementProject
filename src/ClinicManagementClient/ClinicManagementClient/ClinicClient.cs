@@ -14,7 +14,8 @@ namespace ClinicManagementClient
             Console.WriteLine("**********CLINIC MANAGEMENT SYSTEM***********");
             Console.WriteLine();
             while (true)
-            {   
+            {
+                Console.WriteLine();
                 Console.WriteLine("Login Here");
                 Console.WriteLine();
                 Console.WriteLine("Enter your Username");
@@ -31,6 +32,7 @@ namespace ClinicManagementClient
                     IClinic ic = new Clinic();
                     while (true)
                     {
+                        Console.WriteLine("***********MENU*************");
                         Console.WriteLine("1.View Doctors");
                         Console.WriteLine("2.Add Patient");
                         Console.WriteLine("3.Schedule Appointment");
@@ -47,11 +49,11 @@ namespace ClinicManagementClient
                         {
                             case 1:
                                 {
-                                    Console.WriteLine("***********View Doctors*************");
+                                    Console.WriteLine("***********VIEW DOCTORS*************");
                                     List<Doctor> doc_list = ic.viewDoctorDetails();
                                     foreach (Doctor i in doc_list)
                                     {
-                                        Console.WriteLine("---------DOCTOR DETAIL---------");
+                                        Console.WriteLine("***********DOCTOR DETAILS*************");
                                         Console.WriteLine("Doctor id: " + i.doctorID + "\nFirstName: " + i.firstName + "\nLastName: " + i.lastName
                                             + "\nSex: " + i.sex + "\nSpecialization: " + i.specialization + "\nVisiting Time From: " + i.visitingTimeFrom
                                             + "\nVisiting Time To: " + i.visitingTimeTo);
@@ -61,7 +63,7 @@ namespace ClinicManagementClient
                                 }
                             case 2:
                                 {
-                                    Console.WriteLine("***********Adding Patient Details*************");
+                                    Console.WriteLine("***********ADDING PATIENT DETAILS*************");
                                     Console.WriteLine("Enter the Patient First Name: ");
                                     string firstName = Console.ReadLine();
                                     Console.WriteLine("Enter the Patient Last Name: ");
@@ -74,16 +76,28 @@ namespace ClinicManagementClient
                                     string dob = Console.ReadLine();
                                     try { 
 
-                                    ic.validatePatientDetails(new Patient(firstName, lastName, sex, age, Convert.ToDateTime(dob)), dob);
+                                        ic.validatePatientDetails(new Patient(firstName, lastName, sex, age, Convert.ToDateTime(dob)), dob);
                                                               
                                         int id;
                                         DateTime dateofbirth = DateTime.Parse(dob);
                                         int ans = ic.addPatientDetails(new Patient(firstName, lastName, sex, age, dateofbirth), out id);
                                         if (ans == 1)
                                         {
-                                            Console.WriteLine("Patient " + firstName + "" + lastName + "was inserted successfully!!!");
+                                            Console.WriteLine("Patient " + firstName + " " + lastName + " was inserted successfully!!!");
                                             Console.WriteLine("The Patient ID is : " + id);
                                         }
+                                    }
+                                    catch(InvalidNameException e)
+                                    {
+                                        Console.WriteLine(e.Message);
+                                    }
+                                    catch(InvalidAgeException e)
+                                    {
+                                        Console.WriteLine(e.Message);
+                                    }
+                                    catch(InvalidDateInIndianFormatException e)
+                                    {
+                                        Console.WriteLine(e.Message);
                                     }
                                     catch(Exception e)
                                     {
@@ -104,10 +118,9 @@ namespace ClinicManagementClient
                                     Console.WriteLine("General  \nInternal Medicine  \nPediatrics  \nOrthopedics  \nOphthalmology");
                                     string specialization = Console.ReadLine();
                                     try { 
-                                    ic.validatePatIDSpecialization(patientID, specialization);
-                                    
+                                        ic.validatePatIDSpecialization(patientID, specialization);
                                         List<Doctor> dc = ic.displayDoctorBySpecialization(specialization);
-                                        Console.WriteLine("---------DOCTOR DETAIL BY SPECIALIZATION---------");
+                                        Console.WriteLine("***********DOCTOR DETAIL BY SPECIALIZATION*************");
                                         foreach (Doctor i in dc)
                                         {
                                             Console.WriteLine("Doctor id: " + i.doctorID + "\nFirstName: " + i.firstName + "\nLastName: " + i.lastName
@@ -116,50 +129,48 @@ namespace ClinicManagementClient
                                             Console.WriteLine("---------------------------------");
                                         }
                                         Console.WriteLine("Enter the date that you want to book appointment from the below dates: ");
-                                        Console.WriteLine("26/08/2022 , 27/08/2022 , 28/08/2022");
+                                        Console.WriteLine("29/08/2022 , 30/08/2022 , 31/08/2022, 01/09/2022, 02/09/2022, 03/09/2022, 04/09/2022, 05/09/2022, 06/09/2022");
                                         string visit_date = Console.ReadLine();
                                         ic.validateDatePresentInAvailableDates(visit_date);
                                         ic.validateDateInIndianFormat(visit_date);
-                                            Console.WriteLine("Enter the Doctor Id: ");
-                                            int doctorID = int.Parse(Console.ReadLine());
-                                            DateTime date_of_visit = Convert.ToDateTime(visit_date);
-
-                                            List<Appointment> slotlist = ic.displayTimeSlotsOfDoctor(doctorID, date_of_visit);
+                                        Console.WriteLine("Enter the Doctor Id: ");
+                                        int doctorID = int.Parse(Console.ReadLine());
+                                        DateTime date_of_visit = Convert.ToDateTime(visit_date);
+                                        List<Appointment> slotlist = ic.displayTimeSlotsOfDoctor(doctorID, date_of_visit);
                                         List<int> aptIDList = new List<int>();
-                                            foreach (Appointment i in slotlist)
-                                            {
-                                                Console.WriteLine("Appointment id: " + i.aptID + "\nDoctor ID: " + i.doctor_id + "\nVisiting Date: " + i.visiting_date
-                                                       + "\nSlot Time: " + i.timeslot + "\nAppointment Status: " + i.apt_status + "\nPatient ID: " + i.patient_id);
-                                                Console.WriteLine("---------------------------------");
-                                            aptIDList.Add(i.aptID);
+                                        foreach (Appointment i in slotlist)
+                                        {
+                                         Console.WriteLine("Appointment id: " + i.aptID + "\nDoctor ID: " + i.doctor_id + "\nVisiting Date: " + i.visiting_date
+                                         + "\nSlot Time: " + i.timeslot + "\nAppointment Status: " + i.apt_status + "\nPatient ID: " + i.patient_id);
+                                         Console.WriteLine("---------------------------------");
+                                         aptIDList.Add(i.aptID);
 
-                                            }
+                                         }
 
-                                            Console.WriteLine("Enter the appointment ID: ");
-                                            int aptID = int.Parse(Console.ReadLine());
-
-                                            ic.validateAppointmentID(aptID, aptIDList);
-                                            ic.appointmentBooking(aptID, patientID);
-                                        Console.WriteLine("The booking has been succesful and the patient id is: " + patientID);
+                                         Console.WriteLine("Enter the appointment ID: ");
+                                         int aptID = int.Parse(Console.ReadLine());
+                                         ic.validateAppointmentID(aptID, aptIDList);
+                                         ic.appointmentBooking(aptID, patientID);
+                                         Console.WriteLine("The booking has been successfully done!!!");
     
                                     }
-                                    catch(InvalidPatientIDException e) //success
+                                    catch(InvalidPatientIDException e) 
                                     {
                                         Console.WriteLine(e.Message);
                                     }
-                                    catch(InvalidSpecializationException e) //success
+                                    catch(InvalidSpecializationException e) 
                                     {
                                         Console.WriteLine(e.Message);
                                     }
-                                    catch(DateInIndianFormatException e) //fail
+                                    catch(InvalidDateInIndianFormatException e) 
                                     {
                                         Console.WriteLine(e.Message);
                                     }
-                                    catch(DateNotInAvailableDatesException e) //success
+                                    catch(InvalidDateNotInAvailableDatesException e) 
                                     {
                                         Console.WriteLine(e.Message);
                                     }
-                                    catch(InvalidAppointmentIDException e) //success
+                                    catch(InvalidAppointmentIDException e) 
                                     {
                                         Console.WriteLine(e.Message);
                                     }
@@ -172,59 +183,56 @@ namespace ClinicManagementClient
                                 }
                             case 4:
                                 {
-                                    Console.WriteLine("*********Cancel Appointment*************");
+                                    Console.WriteLine("***********CANCEL APPOINTMENT*************");
                                     Console.WriteLine("Enter the Patient ID:");
                                     int patient_id = int.Parse(Console.ReadLine());
                                     try{
                                         ic.validatePatientID(patient_id);
-                                    Console.WriteLine("The Available dates for cancellation are: ");
-                                    Console.WriteLine("26/08/2022 , 27/08/2022 , 28/08/2022");
-                                   
+                                        Console.WriteLine("The Available dates for cancellation are: ");
+                                        Console.WriteLine("29/08/2022 , 30/08/2022 , 31/08/2022, 01/09/2022, 02/09/2022, 03/09/2022, 04/09/2022, 05/09/2022, 06/09/2022");
                                         Console.WriteLine("Enter the Date: ");
                                         string visit_date = Console.ReadLine();
                                         ic.validateDatePresentInAvailableDates(visit_date);
-                                         ic.validateDateInIndianFormat(visit_date);
-                                            DateTime cancellation_date = DateTime.Parse(visit_date);
-                                            List<Appointment> appointment_list = ic.displayPatientAppointmentsBooked(patient_id, cancellation_date);
-                                            if (appointment_list.Count == 0)
-                                            {
-                                                Console.WriteLine("You dont have any active appointments!!");
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine("**********THE BOOKED APPOINTMENTS ARE*************");
-                                            List<int> aptIDList = new List<int>();
-                                                foreach (Appointment i in appointment_list)
-                                                {
-                                                    Console.WriteLine("Appointment id: " + i.aptID + "\nDoctor ID: " + i.doctor_id + "\nVisiting Date: " + i.visiting_date
-                                                           + "\nSlot Time: " + i.timeslot + "\nAppointment Status: " + i.apt_status + "\nPatient ID: " + i.patient_id);
-                                                    Console.WriteLine("---------------------------------");
-                                                    aptIDList.Add(i.aptID);
-                                                }
-                                                Console.WriteLine();
-                                                Console.WriteLine("Enter the Appointment id which has to be cancelled: ");
-                                                int aptID = int.Parse(Console.ReadLine());
-                                                ic.validateAppointmentID(aptID, aptIDList);
-                                                 ic.cancelBookedAppointment(aptID,patient_id);
-
-                                            Console.WriteLine("The appointment with the id " + aptID + " has been cancelled successfully!!");
-
-                                            }
+                                        ic.validateDateInIndianFormat(visit_date);
+                                        DateTime cancellation_date = DateTime.Parse(visit_date);
+                                        List<Appointment> appointment_list = ic.displayPatientAppointmentsBooked(patient_id, cancellation_date);
+                                        if (appointment_list.Count == 0)
+                                        {
+                                         Console.WriteLine("You dont have any active appointments!!");
+                                        }
+                                        else
+                                        {
+                                          Console.WriteLine("***********THE BOOKED APPOINTMENTS ARE*************");
+                                          List<int> aptIDList = new List<int>();
+                                          foreach (Appointment i in appointment_list)
+                                          { 
+                                            Console.WriteLine("Appointment id: " + i.aptID + "\nDoctor ID: " + i.doctor_id + "\nVisiting Date: " + i.visiting_date
+                                            + "\nSlot Time: " + i.timeslot + "\nAppointment Status: " + i.apt_status + "\nPatient ID: " + i.patient_id);
+                                            Console.WriteLine("---------------------------------");
+                                            aptIDList.Add(i.aptID);
+                                          }
+                                          Console.WriteLine();
+                                          Console.WriteLine("Enter the Appointment id which has to be cancelled: ");
+                                          int aptID = int.Parse(Console.ReadLine());
+                                          ic.validateAppointmentID(aptID, aptIDList);
+                                          ic.cancelBookedAppointment(aptID,patient_id);
+                                          Console.WriteLine("The appointment with the id " + aptID + " has been cancelled successfully!!");
+                                        }
                                         
                                     }
-                                    catch(InvalidPatientIDException e) //success
+                                    catch(InvalidPatientIDException e)
                                     {
                                         Console.WriteLine(e.Message);
                                     }
-                                    catch (DateInIndianFormatException e)
+                                    catch (InvalidDateInIndianFormatException e)
                                     {
                                         Console.WriteLine(e.Message);
                                     }
-                                    catch (DateNotInAvailableDatesException e) //success
+                                    catch (InvalidDateNotInAvailableDatesException e)
                                     {
                                         Console.WriteLine(e.Message);
                                     }
-                                    catch(InvalidAppointmentIDException e)
+                                    catch(InvalidAppointmentIDException e) 
                                     {
                                         Console.WriteLine(e.Message);
                                     }
@@ -242,6 +250,10 @@ namespace ClinicManagementClient
 
                         }
                     }
+                }
+                catch(InvalidLoginException e)
+                {
+                    Console.WriteLine(e.Message);
                 }
                 catch(Exception e)
                 {

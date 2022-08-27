@@ -39,7 +39,7 @@ namespace ClinicManagementLibrary
             }
             else
             {
-                throw new LoginExcep("The login has failed!! Please enter the correct credentials!!");
+                throw new InvalidLoginException("The login has failed!! Please enter the correct credentials!!");
             }
         }
 
@@ -89,9 +89,8 @@ namespace ClinicManagementLibrary
 
             DateTime d;
 
-            bool chValidity = DateTime.TryParseExact(dob,"dd/mm/yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,
-            out d);
-            if (chValidity==true)
+            bool dateValidity = DateTime.TryParseExact(dob,"dd/mm/yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out d);
+            if (dateValidity==true)
             {
                 flag2 = true;
             }
@@ -102,15 +101,15 @@ namespace ClinicManagementLibrary
             
             if (flag == false)
             {
-                throw new NameException("The name entered should not contain special characters");
+                throw new InvalidNameException("The name entered should not contain special characters");
             }
             if (flag1 == false)
             {
-                throw new AgeException("The age entered should be between 0 and 121");
+                throw new InvalidAgeException("The age entered should be between 0 and 121");
             }
             if (flag2 == false)
             {
-                throw new DateInIndianFormatException("The date entered should should be in dd/mm/yyyy format");
+                throw new InvalidDateInIndianFormatException("The date entered should should be in dd/mm/yyyy format");
             }
             return true;
         }
@@ -145,11 +144,11 @@ namespace ClinicManagementLibrary
         public bool validateDateInIndianFormat(string date)
         {
             DateTime d;
-            bool chValidity = DateTime.TryParseExact(date, "dd/mm/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
+            bool dateValidity = DateTime.TryParseExact(date, "dd/mm/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
             out d);
-            if (chValidity != true)
+            if (dateValidity != true)
             {
-                throw new DateInIndianFormatException("The date entered should be in dd/mm/yyyy format");
+                throw new InvalidDateInIndianFormatException("The date entered should be in dd/mm/yyyy format");
             }
             
             return true;
@@ -267,6 +266,7 @@ namespace ClinicManagementLibrary
 
 //4.CancellingAppointment
         
+        //Validates the patientID
         public bool validatePatientID(int patient_id)
         {
             bool flag = false;
@@ -318,7 +318,8 @@ namespace ClinicManagementLibrary
         public bool validateDatePresentInAvailableDates(string visit_date)
         {
             bool flag = false;
-            List<string> validDates = new List<string>() { "26/08/2022", "27/08/2022", "28/08/2022" };
+            List<string> validDates = new List<string>() { "29/08/2022", "30/08/2022", "31/08/2022", "01/09/2022", "02/09/2022",
+                "03/09/2022","04/09/2022","05/09/2022","06/09/2022" };
             foreach(string i in validDates)
             {
                 if (i == visit_date)
@@ -329,7 +330,7 @@ namespace ClinicManagementLibrary
             }
             if (flag ==false)
             {
-                throw new DateNotInAvailableDatesException("The date entered is not part of the available dates");
+                throw new InvalidDateNotInAvailableDatesException("The date entered is not part of the available dates");
             }
             return true;
         }

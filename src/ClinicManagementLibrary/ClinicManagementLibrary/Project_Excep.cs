@@ -6,52 +6,46 @@ using System.Threading.Tasks;
 
 namespace ClinicManagementLibrary
 {
-    public class Project_Excep:ApplicationException
-    {
-        public Project_Excep(string message) : base(message)
-        {
-
-        }
-    }
+    
 //CASE 1:
-    public class LoginExcep : ApplicationException
+    public class InvalidLoginException : ApplicationException
     {
-        public LoginExcep(string message) : base(message)
+        public InvalidLoginException(string message) : base(message)
         {
 
         }
     }
 
 //CASE 2:
-    public class NameException : ApplicationException
+    public class InvalidNameException : ApplicationException
     {
-        public NameException(string message) : base(message)
+        public InvalidNameException(string message) : base(message)
         {
 
         }
 
     }
 
-    public class AgeException : ApplicationException
+    public class InvalidAgeException : ApplicationException
     {
-        public AgeException(string message) : base(message)
+        public InvalidAgeException(string message) : base(message)
         {
 
         }
 
     }
 
-    public class DateInIndianFormatException : ApplicationException
+    public class InvalidDateInIndianFormatException : ApplicationException
     {
-        public DateInIndianFormatException(string message) : base(message)
+        public InvalidDateInIndianFormatException(string message) : base(message)
         {
 
         }
 
     }
-    public class DateNotInAvailableDatesException : ApplicationException
+    public class InvalidDateNotInAvailableDatesException : ApplicationException
     {
-        public DateNotInAvailableDatesException(string message) : base(message)
+        public InvalidDateNotInAvailableDatesException(string message) : base(message)
         {
 
         }
