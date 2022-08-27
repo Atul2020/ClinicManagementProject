@@ -49,6 +49,14 @@ namespace ClinicManagementLibrary
         }
 
     }
+    public class DateNotInAvailableDatesException : ApplicationException
+    {
+        public DateNotInAvailableDatesException(string message) : base(message)
+        {
+
+        }
+
+    }
 
     //CASE 3
     public class InvalidPatientIDException : ApplicationException
@@ -71,6 +79,15 @@ namespace ClinicManagementLibrary
     public class InvalidAppointmentIDException : ApplicationException
     {
         public InvalidAppointmentIDException(string message) : base(message)
+        {
+
+        }
+
+    }
+
+    public class InvalidCancellationException : ApplicationException
+    {
+        public InvalidCancellationException(string message) : base(message)
         {
 
         }

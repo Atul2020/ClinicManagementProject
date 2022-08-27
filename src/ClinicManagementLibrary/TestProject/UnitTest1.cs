@@ -51,15 +51,15 @@ namespace TestProject
         [Test]
         public void testAppointmentDetailsByDocID()
         {
-            int actualvalue = hp.displayTimeSlotsOfDoctor(10001,Convert.ToDateTime("26/08/2022")).Count();
-            int expectedvalue = 2;
+            int actualvalue = hp.displayTimeSlotsOfDoctor(10002,Convert.ToDateTime("28/08/2022")).Count();
+            int expectedvalue = 4;
             Assert.AreEqual(expectedvalue, actualvalue);
         }
 
         [Test]
         public void testAppoinmentBooking()
         {
-            int actualvalue = hp.appointmentBooking(200, 1);
+            int actualvalue = hp.appointmentBooking(200, 100);
             int expectedvalue = 1;
             Assert.AreEqual(expectedvalue, actualvalue);
         }
@@ -76,7 +76,7 @@ namespace TestProject
 
         public void validatePatIDSpecialization()
         {
-            bool actualvalue = hp.validatePatIDSpecialization(1, "General");
+            bool actualvalue = hp.validatePatIDSpecialization(100, "General");
             bool expectedvalue = true;
             Assert.AreEqual(expectedvalue, actualvalue);
         }
@@ -93,7 +93,7 @@ namespace TestProject
         [Test]
         public void testCancelBooking()
         {
-            int actualvalue = hp.cancelBookedAppointment(200);
+            int actualvalue = hp.cancelBookedAppointment(216,100);
             int expectedvalue = 1;
             Assert.AreEqual(expectedvalue, actualvalue);
         }

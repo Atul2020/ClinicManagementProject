@@ -25,11 +25,15 @@ namespace ClinicManagementLibrary
 
         List<Appointment> displayTimeSlotsOfDoctor(int docID,DateTime dateOfAppointment);
 
+        bool validateAppointmentID(int aptID, List<int> aptIDList);
+
         int appointmentBooking(int aptID,int patient_id);
 
         List<Appointment> displayPatientAppointmentsBooked(int patient_id, DateTime visit_date);
 
-        int cancelBookedAppointment(int aptID);
+        int cancelBookedAppointment(int aptID,int patient_id);
         bool validatePatientID(int patient_id);
+        bool validateDatePresentInAvailableDates(string visit_date);
+
     }
 }

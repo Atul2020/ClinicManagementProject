@@ -149,7 +149,7 @@ namespace ClinicManagementLibrary
             out d);
             if (chValidity != true)
             {
-                throw new DateInIndianFormatException("The date entered should should be in dd/mm/yyyy format");
+                throw new DateInIndianFormatException("The date entered should be in dd/mm/yyyy format");
             }
             
             return true;
@@ -232,7 +232,24 @@ namespace ClinicManagementLibrary
             }
             return slotList;
         }
-
+        //Validates the appointment id entered by the user
+        public bool validateAppointmentID(int aptID,List<int> aptIDList)
+        {
+            bool flag =false;
+            foreach(int apt in aptIDList)
+            {
+                if (aptID == apt)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag == false)
+            {
+                throw new InvalidAppointmentIDException("The Appointment ID entered is not Invalid!!!");
+            }
+            return true;
+        }
         //Method to book the appointment
         public int appointmentBooking(int apt_id,int patient_id)
         {
@@ -283,15 +300,38 @@ namespace ClinicManagementLibrary
         }
 
         //Appointment cancellation is done
-        public int cancelBookedAppointment(int apt_id)
+        public int cancelBookedAppointment(int apt_id,int patient_id)
         {
             con = getcon();
-            SqlCommand cmd = new SqlCommand("update appointments set apt_status='free',patient_id=null where aptID=@aptID", con);
+            SqlCommand cmd = new SqlCommand("update appointments set apt_status='free',patient_id=null where aptID=@aptID and patient_id=@patient_id", con);
             cmd.Parameters.AddWithValue("@aptID", apt_id);
-
+            cmd.Parameters.AddWithValue("@patient_id", patient_id);
             int i = cmd.ExecuteNonQuery();
+            if (i == 0)
+            {
+                throw new InvalidCancellationException("The cancellation has not been successful");
+            }
             return i;
 
+        }
+        // Validates if the date entered is present in the date list
+        public bool validateDatePresentInAvailableDates(string visit_date)
+        {
+            bool flag = false;
+            List<string> validDates = new List<string>() { "26/08/2022", "27/08/2022", "28/08/2022" };
+            foreach(string i in validDates)
+            {
+                if (i == visit_date)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag ==false)
+            {
+                throw new DateNotInAvailableDatesException("The date entered is not part of the available dates");
+            }
+            return true;
         }
     }
 }
