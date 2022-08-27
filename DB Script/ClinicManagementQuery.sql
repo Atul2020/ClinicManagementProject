@@ -2,22 +2,25 @@ create database ClinicManagement
 use  ClinicManagement
 
 --Creating the Users Table
-create table Users(username varchar(10) unique constraint verify_username check(username not like '%[^a-zA-Z0-9]%') 
-, firstname varchar(30),lastname varchar(30),password varchar(30) constraint verify_password check(password like '%@%'))
+create table Users(username varchar(10) unique constraint verify_username check(username not like '%[^a-zA-Z0-9]%'), 
+firstname varchar(30),
+lastname varchar(30),
+password varchar(30) constraint verify_password check(password like '%@%'))
 
 --Inserting default Users into the table
 insert into Users values('Atulacc','Atul','Lakkapragada','07@atul')
 insert into Users values('Dwayneacc','Dwayne','Johnson','11@Ddwayne')
 
-
 select * from Users;
 
-
-
 --Creating the Doctors Table
-create table Doctors (doctor_id int primary key, firstname varchar(30) constraint verify_firstname check(firstname not like '%[^a-zA-Z0-9]%'), 
+create table Doctors (doctor_id int primary key,
+firstname varchar(30) constraint verify_firstname check(firstname not like '%[^a-zA-Z0-9]%'), 
 lastname varchar(30) constraint verify_lastname check(lastname not like '%[^a-zA-Z0-9]%'), 
-sex varchar(10), specialization varchar(30), visiting_hours_from time,visiting_hours_to time)
+sex varchar(10),
+specialization varchar(30),
+visiting_hours_from time,
+visiting_hours_to time)
 
 --Inserting default Doctors into the table
 insert into doctors values('10001','Rohith','Kumar','M','General','12:00','15:00')
@@ -29,15 +32,22 @@ insert into doctors values('10005','Amanda','Dolly','F','Ophthalmology','09:00',
 select * from doctors;
 
 --Creating the Patients Table
-create table Patients (patient_id int identity(100,1) primary key, firstname varchar(30) constraint verify_firstname_for_patient check(firstname not like '%[^a-zA-Z0-9]%'),
-lastname varchar(30) constraint verify_lastname_for_patient check(lastname not like '%[^a-zA-Z0-9]%'), sex varchar(10),
-age int constraint check_age_patient check(age between 0 and 121), dob date)
+create table Patients (patient_id int identity(100,1) primary key,
+firstname varchar(30) constraint verify_firstname_for_patient check(firstname not like '%[^a-zA-Z0-9]%'),
+lastname varchar(30) constraint verify_lastname_for_patient check(lastname not like '%[^a-zA-Z0-9]%'),
+sex varchar(10),
+age int constraint check_age_patient check(age between 0 and 121),
+dob date)
 
 select * from patients
 
 --Creating the Appointments table
-create table Appointments (aptID int identity(200,1) primary key,doctor_id int foreign key(doctor_id) 
-references doctors(doctor_id),visiting_date date,slottime varchar(30),apt_status varchar(30),patient_id int foreign key references Patients(patient_id));
+create table Appointments (aptID int identity(200,1) primary key,
+doctor_id int foreign key(doctor_id) references doctors(doctor_id),
+visiting_date date,
+slottime varchar(30),
+apt_status varchar(30),
+patient_id int foreign key references Patients(patient_id))
 
 select * from Appointments
 

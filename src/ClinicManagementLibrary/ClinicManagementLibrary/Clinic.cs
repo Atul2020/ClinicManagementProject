@@ -10,12 +10,13 @@ namespace ClinicManagementLibrary
 {
     public class Clinic : IClinic
     {
-        List<Doctor> docList = new List<Doctor>(); 
+        List<Doctor> docList = new List<Doctor>();
+
         public static SqlConnection con;
         public static SqlCommand cmd;
         public static SqlCommand cmd1;
 
-        List<Appointment> slotList = new List<Appointment>();
+        
 
         public static SqlConnection getcon()
         {
@@ -140,13 +141,36 @@ namespace ClinicManagementLibrary
 
         }
 
- //3.schedule appointment
+        public List<Patient> viewPatientDetails()
+        {
+            List<Patient> patientDetails = new List<Patient>();
+            con = getcon();
+            SqlCommand cmd = new SqlCommand("select * from patients");
+            cmd.Connection = con;
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                Patient p = new Patient();
+                p.patientID = Convert.ToInt32(dr["patient_id"]);
+                p.firstName = Convert.ToString(dr["firstname"]);
+                p.lastName = Convert.ToString(dr["lastName"]);
+                p.sex = Convert.ToString(dr["sex"]);
+                p.age = Convert.ToInt32(dr["age"]);
+                p.dob = Convert.ToDateTime(dr["dob"]);
+            
+                patientDetails.Add(p);
+            }
+            return patientDetails;
+        }
+
+        //3.schedule appointment
         public bool validateDateInIndianFormat(string date)
         {
+  
             DateTime d;
             bool dateValidity = DateTime.TryParseExact(date, "dd/mm/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
             out d);
-            if (dateValidity != true)
+            if (dateValidity == false)
             {
                 throw new InvalidDateInIndianFormatException("The date entered should be in dd/mm/yyyy format");
             }
@@ -216,10 +240,29 @@ namespace ClinicManagementLibrary
             return doctorsDetails;
         }
 
+        //validates if the doctor id entered is matching
+        public bool validateDoctorIDBySpecialization(int doctorID, List<int> doctorIDList)
+        {
+            bool flag = false;
+            foreach(int i in doctorIDList)
+            {
+                if (doctorID == i)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag == false)
+            {
+                throw new InvalidDoctorIDException("There was no doctor matching the specialization with the doctor ID entered. Please enter the ID again!!");
+            }
+            return true;
+        }
         //displays the available time slots that are available
         public List<Appointment> displayTimeSlotsOfDoctor(int docID, DateTime dateOfAppointment)
         {
-            con=getcon();
+            List<Appointment> slotList = new List<Appointment>();
+            con =getcon();
             SqlCommand cmd = new SqlCommand("select * from appointments where doctor_id=@doctor_id and apt_status='free' and visiting_date=@visiting_date");
             cmd.Connection = con;
             cmd.Parameters.AddWithValue("@doctor_id",docID);
@@ -245,7 +288,7 @@ namespace ClinicManagementLibrary
             }
             if (flag == false)
             {
-                throw new InvalidAppointmentIDException("The Appointment ID entered is not Invalid!!!");
+                throw new InvalidAppointmentIDException("The Appointment ID entered is  Invalid!!!");
             }
             return true;
         }

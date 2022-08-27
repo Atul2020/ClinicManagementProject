@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ClinicManagementLibrary
 {
     
-//CASE 1:
+
     public class InvalidLoginException : ApplicationException
     {
         public InvalidLoginException(string message) : base(message)
@@ -16,7 +16,7 @@ namespace ClinicManagementLibrary
         }
     }
 
-//CASE 2:
+
     public class InvalidNameException : ApplicationException
     {
         public InvalidNameException(string message) : base(message)
@@ -52,7 +52,6 @@ namespace ClinicManagementLibrary
 
     }
 
-    //CASE 3
     public class InvalidPatientIDException : ApplicationException
     {
         public InvalidPatientIDException(string message) : base(message)
@@ -70,6 +69,14 @@ namespace ClinicManagementLibrary
 
     }
 
+    public class InvalidDoctorIDException : ApplicationException
+    {
+        public InvalidDoctorIDException(string message) : base(message)
+        {
+
+        }
+
+    }
     public class InvalidAppointmentIDException : ApplicationException
     {
         public InvalidAppointmentIDException(string message) : base(message)

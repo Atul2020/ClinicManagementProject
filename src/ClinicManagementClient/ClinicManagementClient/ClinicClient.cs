@@ -35,13 +35,14 @@ namespace ClinicManagementClient
                         Console.WriteLine("***********MENU*************");
                         Console.WriteLine("1.View Doctors");
                         Console.WriteLine("2.Add Patient");
-                        Console.WriteLine("3.Schedule Appointment");
-                        Console.WriteLine("4.Cancel Appointment");
-                        Console.WriteLine("5.Logout");
+                        Console.WriteLine("3.View Patients");
+                        Console.WriteLine("4.Schedule Appointment");
+                        Console.WriteLine("5.Cancel Appointment");
+                        Console.WriteLine("6.Logout");
                         Console.WriteLine();
                         Console.WriteLine("Enter your Choice :");
                         int choice = int.Parse(Console.ReadLine());
-                        if (choice == 5)
+                        if (choice == 6)
                         {
                             break;
                         }
@@ -107,8 +108,20 @@ namespace ClinicManagementClient
                                     Console.WriteLine("-----------------------------");
                                     break;
                                 }
-
                             case 3:
+                                {
+                                    Console.WriteLine("***********VIEW PATIENTS*************");
+                                    List<Patient> pat_list = ic.viewPatientDetails();
+                                    foreach (Patient i in pat_list)
+                                    {
+                                        Console.WriteLine("***********PATIENT DETAILS*************");
+                                        Console.WriteLine("Patient ID: " + i.patientID + "\nFirstName: " + i.firstName + "\nLastName: " + i.lastName
+                                            + "\nSex: " + i.sex + "\nAge: " + i.age + "\nDate Of Birth: " + i.dob);
+                                        Console.WriteLine("---------------------------------");
+                                    }
+                                    break;
+                                }
+                            case 4:
                                 {
                                     Console.WriteLine("***********SCHEDULE APPOINTMENT*************");
                                     Console.WriteLine("Enter the patient id:");
@@ -120,6 +133,8 @@ namespace ClinicManagementClient
                                     try { 
                                         ic.validatePatIDSpecialization(patientID, specialization);
                                         List<Doctor> dc = ic.displayDoctorBySpecialization(specialization);
+                                        List<int> doctorIDList = new List<int>();
+
                                         Console.WriteLine("***********DOCTOR DETAIL BY SPECIALIZATION*************");
                                         foreach (Doctor i in dc)
                                         {
@@ -127,7 +142,9 @@ namespace ClinicManagementClient
                                                    + "\nSex: " + i.sex + "\nSpecialization: " + i.specialization + "\nVisiting Time From: " + i.visitingTimeFrom
                                                    + "\nVisiting Time To: " + i.visitingTimeTo);
                                             Console.WriteLine("---------------------------------");
+                                            doctorIDList.Add(i.doctorID);
                                         }
+                                        
                                         Console.WriteLine("Enter the date that you want to book appointment from the below dates: ");
                                         Console.WriteLine("29/08/2022 , 30/08/2022 , 31/08/2022, 01/09/2022, 02/09/2022, 03/09/2022, 04/09/2022, 05/09/2022, 06/09/2022");
                                         string visit_date = Console.ReadLine();
@@ -135,6 +152,7 @@ namespace ClinicManagementClient
                                         ic.validateDateInIndianFormat(visit_date);
                                         Console.WriteLine("Enter the Doctor Id: ");
                                         int doctorID = int.Parse(Console.ReadLine());
+                                        ic.validateDoctorIDBySpecialization(doctorID, doctorIDList);
                                         DateTime date_of_visit = Convert.ToDateTime(visit_date);
                                         List<Appointment> slotlist = ic.displayTimeSlotsOfDoctor(doctorID, date_of_visit);
                                         List<int> aptIDList = new List<int>();
@@ -181,7 +199,7 @@ namespace ClinicManagementClient
 
                                     break;
                                 }
-                            case 4:
+                            case 5:
                                 {
                                     Console.WriteLine("***********CANCEL APPOINTMENT*************");
                                     Console.WriteLine("Enter the Patient ID:");
@@ -245,6 +263,7 @@ namespace ClinicManagementClient
                                 }
                             default:
                                 {
+                                    Console.WriteLine("Please Enter the correct Choice !!");
                                     break;
                                 }
 
