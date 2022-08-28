@@ -127,8 +127,8 @@ namespace ClinicManagementClient
                                     }
                                     break;
                                 }
-                            case 4: // HERE THE APPOINMENT BOOKING IS DONE, FIRST DOCTOR DETAILS BY SPECIALIZATION ARE DISPLAYED
-                                    // AND BASED ON THE DATE, THE AVAILABLE TIME SLOTS ARE DISPLAYED FROM WHICH THE BOOKING IS DONE
+                            case 4: // HERE THE APPOINMENT BOOKING IS DONE, FIRST DOCTOR DETAILS BY SPECIALIZATION ENTERED BY THE USER ARE DISPLAYED
+                                    // THEN BASED ON THE DATE, THE AVAILABLE TIME SLOTS ARE DISPLAYED FROM WHICH THE BOOKING IS DONE
                                 {
                                     Console.WriteLine("***********SCHEDULE APPOINTMENT*************");
 
@@ -212,7 +212,8 @@ namespace ClinicManagementClient
 
                                     break;
                                 }
-                            case 5: // HERE BASED ON THE PATIENT_ID AND THE DATE ENTERED, THE APPOINTMENTS BOOKED ARE DISPLAYED. THEN THE APPOINTMENT CAN BE CANCELLED.
+                            case 5: // HERE BASED ON THE PATIENT_ID AND THE DATE ENTERED, THE APPOINTMENTS BOOKED ARE DISPLAYED.
+                                    // THEN THE APPOINTMENT CAN BE CANCELLED WITH THE HELP OF THE APTID
                                 {
                                     Console.WriteLine("***********CANCEL APPOINTMENT*************");
                                     Console.WriteLine("Enter the Patient ID:");

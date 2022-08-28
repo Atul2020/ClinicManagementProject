@@ -23,6 +23,7 @@ select * from Users where username=@username and password=@password;
 
 exec sp_loginUser 'Atulacc','07@atul'
 
+
 --Creating the Doctors Table
 create table Doctors (doctor_id int primary key,
 firstname varchar(30) constraint verify_firstname check(firstname not like '%[^a-zA-Z0-9]%'), 
@@ -59,6 +60,7 @@ as
 select * from doctors where specialization=@specialization
 
 exec sp_displayDocBySpecialization 'General'
+
 
 --Creating the Patients Table
 create table Patients (patient_id int identity(100,1) primary key,
@@ -259,6 +261,7 @@ select * from appointments where doctor_id=@doctor_id and apt_status='free' and 
 exec sp_displayAvailableTimeSlot 10002,'08/29/2022'
 
 go
+
 --stored procedure to book appointment
 create proc sp_bookAppointment(
 @patient_id int,

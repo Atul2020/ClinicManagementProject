@@ -25,9 +25,11 @@ namespace ClinicManagementLibrary
             return con;
         }
 
- //1. User login method
+    // User login method
         public bool loginUser(string username, string password)
         {
+            //The username and password entered by the user are verified with the data in "Users" table.
+            //If the datareader is empty then an an InvalidLoginException is Thrown.
             con = getcon();
             SqlCommand cmd = new SqlCommand("sp_loginUser");
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -45,10 +47,10 @@ namespace ClinicManagementLibrary
             }
         }
 
-//2.Home
         //Method to view the doctor details
         public List<Doctor> viewDoctorDetails()
         {
+            //The "Doctors" table is queried and the data is sent to the  client where it is printed.
             con = getcon();
             SqlCommand cmd = new SqlCommand("sp_viewDocDetails");
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -72,6 +74,9 @@ namespace ClinicManagementLibrary
         //Method that validates the patient details(firstname,lastname and age)
         public bool validatePatientDetails(Patient p)
         {
+            //The firstname and lastname are validated so that they dont have any special characters.
+            //The age is validated so that it is in between 0 and 120.
+            //Various exceptions are thrown if the validation is unsuccessful.
             string fname = p.firstName;
             string lname = p.lastName;
            
@@ -103,6 +108,8 @@ namespace ClinicManagementLibrary
         //Adding the patient details into the patient table
         public int addPatientDetails(Patient p,out int patientID)
         {
+            //The details entered by the user are entered into patients table.
+            //The out parameter is used so that this function can return another value to the client which is the patient_id.
             con = getcon();
             SqlCommand cmd = new SqlCommand("sp_insertIntoPatients");
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -129,6 +136,7 @@ namespace ClinicManagementLibrary
         // Method to view all the patient detials
         public List<Patient> viewPatientDetails()
         {
+            //All the patient details are retrieved from the patients table and are returned as a list.
             List<Patient> patientDetails = new List<Patient>();
             con = getcon();
             SqlCommand cmd = new SqlCommand("sp_viewPatientDetails");
@@ -150,10 +158,11 @@ namespace ClinicManagementLibrary
             return patientDetails;
         }
 
- //3.schedule appointment
+        // Method that validates date in Indian Format
         public bool validateDateInIndianFormat(string date)
         {
-  
+            //The date entered by the user is validated on whether it follows the Indian Format and this function returns
+            //a boolean value true otherwise throws an exception.
             DateTime d;
             bool dateValidity = DateTime.TryParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
             out d);
@@ -169,6 +178,8 @@ namespace ClinicManagementLibrary
         //Validating the pat_id and the specialization
         public bool validatePatIDSpecialization(int patient_id,string specialization)
         {
+            //The entered specialization by the user is checked and also the patientid.
+            //If validation is not successful exceptions are thrown.
             List<string> s = new List<string>() { "General" , "Internal Medicine" , "Pediatrics" , "Orthopedics" , "Ophthalmology" };
             bool flag = false;
             bool flag1 = false;
@@ -205,6 +216,7 @@ namespace ClinicManagementLibrary
        //Display all the doctors based on specializtion required
         public List<Doctor> displayDoctorBySpecialization(string specialization)
         {
+            //Based on the specialization the user enters,all the respective doctors details available are stored and returned as a list.
             List<Doctor> doctorsDetails = new List<Doctor>();
             con = getcon();
             SqlCommand cmd = new SqlCommand("sp_displayDocBySpecialization");
@@ -230,6 +242,8 @@ namespace ClinicManagementLibrary
         //validates if the doctor id entered is matching
         public bool validateDoctorIDBySpecialization(int doctorID, List<int> doctorIDList)
         {
+            //This function validates whether the doctorID entered by the user is matching the doctor's available with
+            //that specialization. Otherwise it throws an exception.
             bool flag = false;
             foreach(int i in doctorIDList)
             {
@@ -248,6 +262,8 @@ namespace ClinicManagementLibrary
         //displays the available time slots that are available
         public List<Appointment> displayTimeSlotsOfDoctor(int docID, DateTime dateOfAppointment)
         {
+            //This function queries the appointments table for the appointments that are available to be booked for that respective doctor
+            //and returns a list to the client.
             List<Appointment> slotList = new List<Appointment>();
             con =getcon();
             SqlCommand cmd = new SqlCommand("sp_displayAvailableTimeSlot");
@@ -265,6 +281,8 @@ namespace ClinicManagementLibrary
         //Validates the appointment id entered by the user
         public bool validateAppointmentID(int aptID,List<int> aptIDList)
         {
+            //The appointment id is validated as to whether it is the correct appointment that is free to be booked.
+            //Otherwise it throws an exception.
             bool flag =false;
             foreach(int apt in aptIDList)
             {
@@ -283,6 +301,8 @@ namespace ClinicManagementLibrary
         //Method to book the appointment
         public int appointmentBooking(int apt_id,int patient_id)
         {
+            //The booking is done here where the status is changed to booked and the patients_id is updated in the appointments table.
+            //If the appointment id was invalid an exception is thrown.
             con = getcon();
             SqlCommand cmd = new SqlCommand("sp_bookAppointment");
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -296,12 +316,11 @@ namespace ClinicManagementLibrary
             }
             return i;
         }
-
-//4.CancellingAppointment
         
         //Validates the patientID
         public bool validatePatientID(int patient_id)
         {
+            //The patient id entered is validated and if its not present in the patients table and exception is thrown.
             bool flag = false;
             con = getcon();
             SqlCommand cmd = new SqlCommand("select * from patients where patient_id=@patient_id");
@@ -319,6 +338,7 @@ namespace ClinicManagementLibrary
         //Displays all the appointments matching the patient_id
         public List<Appointment> displayPatientAppointmentsBooked(int patient_id,DateTime visit_date)
         {
+            //All of the appointments booked by a specific patient are displayed based on their patient id and visit_date.
             List<Appointment> app = new List<Appointment>();
             con = getcon();
             SqlCommand cmd = new SqlCommand("select * from appointments where patient_id=@patient_id and visiting_date=@visiting_date",con);
@@ -335,6 +355,8 @@ namespace ClinicManagementLibrary
         //Appointment cancellation is done
         public int cancelBookedAppointment(int apt_id,int patient_id)
         {
+            //The cancellation of an already booked appointment is done here.
+            //If the cancellation was not successfull,then an exception is thrown.
             con = getcon();
             SqlCommand cmd = new SqlCommand("sp_cancelBookedAppointment");
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -352,6 +374,8 @@ namespace ClinicManagementLibrary
         // Validates if the date entered is present in the date list
         public bool validateDatePresentInAvailableDates(string visit_date)
         {
+            //The date entered by the user is verified as to whether it is present in the available dates list.
+            //Otherwise an exception is thrown.
             bool flag = false;
             List<string> validDates = new List<string>() { "29/08/2022", "30/08/2022", "31/08/2022", "01/09/2022", "02/09/2022",
                 "03/09/2022","04/09/2022","05/09/2022","06/09/2022" };
