@@ -35,7 +35,7 @@ namespace TestProject
         {
             DateTime dt = Convert.ToDateTime("10/12/2000");
             Patient p = new Patient("Harry", "Maguire", "M", 45,dt);
-            bool actualvalue = c.validatePatientDetails(p,"08/11/2000");
+            bool actualvalue = c.validatePatientDetails(p);
             bool expectedvalue = true;
             Assert.AreEqual(expectedvalue, actualvalue);
         }
@@ -43,8 +43,9 @@ namespace TestProject
         [Test]
         public void testValidateDateInIndianFormat()
         {
-            bool actualvalue = c.validateDateInIndianFormat("31/08/2022");
-            bool expectedvalue = false;
+            string dateEg = "31/08/2022";
+            bool actualvalue = c.validateDateInIndianFormat(dateEg);
+            bool expectedvalue = true;
             Assert.AreEqual(expectedvalue, actualvalue);
 
         }
@@ -69,7 +70,7 @@ namespace TestProject
         public void testDisplayTimeSlotsOfDoctor()
         {
             int actualvalue = c.displayTimeSlotsOfDoctor(10001,Convert.ToDateTime("29/08/2022")).Count();
-            int expectedvalue = 2;
+            int expectedvalue = 1;
             Assert.AreEqual(expectedvalue, actualvalue);
         }
 
@@ -93,7 +94,7 @@ namespace TestProject
         public void testViewPatientDetails()
         {
             int actualvalue = c.viewPatientDetails().Count;
-            int expectedvalue = 1;
+            int expectedvalue = 2;
             Assert.AreEqual(expectedvalue, actualvalue);
 
         }

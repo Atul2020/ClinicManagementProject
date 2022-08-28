@@ -29,7 +29,8 @@ namespace ClinicManagementLibrary
         public bool loginUser(string username, string password)
         {
             con = getcon();
-            SqlCommand cmd = new SqlCommand("select * from Users where username=@username and password=@password");
+            SqlCommand cmd = new SqlCommand("sp_loginUser");
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Connection = con;
             cmd.Parameters.AddWithValue("@username", username);
             cmd.Parameters.AddWithValue("@password", password);
@@ -49,7 +50,8 @@ namespace ClinicManagementLibrary
         public List<Doctor> viewDoctorDetails()
         {
             con = getcon();
-            SqlCommand cmd = new SqlCommand("select * from doctors");
+            SqlCommand cmd = new SqlCommand("sp_viewDocDetails");
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Connection = con;
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
@@ -68,7 +70,7 @@ namespace ClinicManagementLibrary
         }
 
         //Method that validates the patient details(firstname,lastname and age)
-        public bool validatePatientDetails(Patient p,string dob)
+        public bool validatePatientDetails(Patient p)
         {
             string fname = p.firstName;
             string lname = p.lastName;
@@ -76,7 +78,6 @@ namespace ClinicManagementLibrary
             int age = p.age;
             bool flag = true;
             bool flag1 = true;
-            bool flag2 = true;
             Regex re = new Regex("[^a-zA-Z0-9]");
             if (re.IsMatch(fname) | re.IsMatch(lname))
             {
@@ -88,18 +89,6 @@ namespace ClinicManagementLibrary
                 flag1 = false;
             }
 
-            DateTime d;
-
-            bool dateValidity = DateTime.TryParseExact(dob,"dd/mm/yyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out d);
-            if (dateValidity==true)
-            {
-                flag2 = true;
-            }
-            else
-            {
-                flag2 =false;
-            }
-            
             if (flag == false)
             {
                 throw new InvalidNameException("The name entered should not contain special characters");
@@ -108,10 +97,6 @@ namespace ClinicManagementLibrary
             {
                 throw new InvalidAgeException("The age entered should be between 0 and 121");
             }
-            if (flag2 == false)
-            {
-                throw new InvalidDateInIndianFormatException("The date entered should should be in dd/mm/yyyy format");
-            }
             return true;
         }
 
@@ -119,7 +104,8 @@ namespace ClinicManagementLibrary
         public int addPatientDetails(Patient p,out int patientID)
         {
             con = getcon();
-            cmd = new SqlCommand("insert into patients(firstname,lastname,sex,age,dob) values(@firstname,@lastname,@sex,@age,@dob)");
+            SqlCommand cmd = new SqlCommand("sp_insertIntoPatients");
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Connection = con;
             cmd.Parameters.AddWithValue("@firstname", p.firstName);
             cmd.Parameters.AddWithValue("@lastname", p.lastName);
@@ -140,12 +126,13 @@ namespace ClinicManagementLibrary
             return i;
 
         }
-
+        // Method to view all the patient detials
         public List<Patient> viewPatientDetails()
         {
             List<Patient> patientDetails = new List<Patient>();
             con = getcon();
-            SqlCommand cmd = new SqlCommand("select * from patients");
+            SqlCommand cmd = new SqlCommand("sp_viewPatientDetails");
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Connection = con;
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
@@ -163,12 +150,12 @@ namespace ClinicManagementLibrary
             return patientDetails;
         }
 
-        //3.schedule appointment
+ //3.schedule appointment
         public bool validateDateInIndianFormat(string date)
         {
   
             DateTime d;
-            bool dateValidity = DateTime.TryParseExact(date, "dd/mm/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
+            bool dateValidity = DateTime.TryParseExact(date, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
             out d);
             if (dateValidity == false)
             {
@@ -218,10 +205,10 @@ namespace ClinicManagementLibrary
        //Display all the doctors based on specializtion required
         public List<Doctor> displayDoctorBySpecialization(string specialization)
         {
-
             List<Doctor> doctorsDetails = new List<Doctor>();
             con = getcon();
-            SqlCommand cmd = new SqlCommand("select * from doctors where specialization=@specialization");
+            SqlCommand cmd = new SqlCommand("sp_displayDocBySpecialization");
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Connection = con;
             cmd.Parameters.AddWithValue("@specialization", specialization);
             SqlDataReader dr = cmd.ExecuteReader();
@@ -263,7 +250,8 @@ namespace ClinicManagementLibrary
         {
             List<Appointment> slotList = new List<Appointment>();
             con =getcon();
-            SqlCommand cmd = new SqlCommand("select * from appointments where doctor_id=@doctor_id and apt_status='free' and visiting_date=@visiting_date");
+            SqlCommand cmd = new SqlCommand("sp_displayAvailableTimeSlot");
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Connection = con;
             cmd.Parameters.AddWithValue("@doctor_id",docID);
             cmd.Parameters.AddWithValue("@visiting_date",dateOfAppointment);
@@ -296,7 +284,9 @@ namespace ClinicManagementLibrary
         public int appointmentBooking(int apt_id,int patient_id)
         {
             con = getcon();
-            SqlCommand cmd = new SqlCommand("update appointments set apt_status='booked',patient_id=@patient_id where aptID=@aptID",con);
+            SqlCommand cmd = new SqlCommand("sp_bookAppointment");
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Connection = con;
             cmd.Parameters.AddWithValue("@aptID", apt_id);
             cmd.Parameters.AddWithValue("@patient_id",patient_id);
             int i = cmd.ExecuteNonQuery();
@@ -346,7 +336,9 @@ namespace ClinicManagementLibrary
         public int cancelBookedAppointment(int apt_id,int patient_id)
         {
             con = getcon();
-            SqlCommand cmd = new SqlCommand("update appointments set apt_status='free',patient_id=null where aptID=@aptID and patient_id=@patient_id", con);
+            SqlCommand cmd = new SqlCommand("sp_cancelBookedAppointment");
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Connection = con;
             cmd.Parameters.AddWithValue("@aptID", apt_id);
             cmd.Parameters.AddWithValue("@patient_id", patient_id);
             int i = cmd.ExecuteNonQuery();
@@ -373,7 +365,7 @@ namespace ClinicManagementLibrary
             }
             if (flag ==false)
             {
-                throw new InvalidDateNotInAvailableDatesException("The date entered is not part of the available dates");
+                throw new InvalidDateNotInAvailableDatesException("The date entered is not part of the available dates or the format of the date should be dd/mm/yyyy!!!");
             }
             return true;
         }

@@ -11,7 +11,17 @@ password varchar(30) constraint verify_password check(password like '%@%'))
 insert into Users values('Atulacc','Atul','Lakkapragada','07@atul')
 insert into Users values('Dwayneacc','Dwayne','Johnson','11@Ddwayne')
 
-select * from Users;
+go 
+
+--stored procedure to login
+create proc sp_loginUser(
+@username varchar(10),
+@password varchar(30)
+)
+as
+select * from Users where username=@username and password=@password;
+
+exec sp_loginUser 'Atulacc','07@atul'
 
 --Creating the Doctors Table
 create table Doctors (doctor_id int primary key,
@@ -31,6 +41,25 @@ insert into doctors values('10005','Amanda','Dolly','F','Ophthalmology','09:00',
 
 select * from doctors;
 
+go
+
+--stored procedure to view the doctor details
+create proc sp_viewDocDetails
+as
+select * from Doctors
+
+exec sp_viewDocDetails
+
+go
+
+--stored procedure to display doctor by specialization
+create proc sp_displayDocBySpecialization(
+@specialization varchar(30))
+as
+select * from doctors where specialization=@specialization
+
+exec sp_displayDocBySpecialization 'General'
+
 --Creating the Patients Table
 create table Patients (patient_id int identity(100,1) primary key,
 firstname varchar(30) constraint verify_firstname_for_patient check(firstname not like '%[^a-zA-Z0-9]%'),
@@ -39,7 +68,29 @@ sex varchar(10),
 age int constraint check_age_patient check(age between 0 and 121),
 dob date)
 
-select * from patients
+go
+
+--stored procedure to insert details into patient table
+create proc sp_insertIntoPatients(
+@firstname varchar(30),
+@lastname varchar(30),
+@sex varchar(10),
+@age int,
+@dob date)
+as
+insert into Patients(firstname,lastname,sex,age,dob) values(@firstname,@lastname,@sex,@age,@dob) 
+
+exec sp_insertIntoPatients 'John','Roy','M',21,'12/08/2000'
+
+go
+
+--stored procedure to view the patient details
+create proc sp_viewPatientDetails
+as
+select * from Patients
+
+exec sp_viewDocDetails
+
 
 --Creating the Appointments table
 create table Appointments (aptID int identity(200,1) primary key,
@@ -194,3 +245,40 @@ exec insertToAppointments 10004,'2022-09-07','10:00-11:00','free',Null
 exec insertToAppointments 10004,'2022-09-07','11:00-12:00','free',Null
 exec insertToAppointments 10005,'2022-09-07','09:00-10:00','free',Null
 exec insertToAppointments 10005,'2022-09-07','10:00-11:00','free',Null
+
+go 
+
+--stored procedure to display all the available time slots
+create proc sp_displayAvailableTimeSlot(
+@doctor_id int,
+@visiting_date date
+)
+as
+select * from appointments where doctor_id=@doctor_id and apt_status='free' and visiting_date=@visiting_date
+
+exec sp_displayAvailableTimeSlot 10002,'08/29/2022'
+
+go
+--stored procedure to book appointment
+create proc sp_bookAppointment(
+@patient_id int,
+@aptID int
+)
+as
+update appointments set apt_status='booked',patient_id=@patient_id where aptID=@aptID
+
+exec sp_bookAppointment 101,201
+
+select * from appointments
+
+
+go
+
+--stored procedure to cancel booked appointments
+create proc sp_cancelBookedAppointment(
+@aptID int,
+@patient_id int)
+as
+update appointments set apt_status='free',patient_id=null where aptID=@aptID and patient_id=@patient_id
+
+exec sp_cancelBookedAppointment 204,100

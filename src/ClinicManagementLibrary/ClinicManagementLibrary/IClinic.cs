@@ -13,7 +13,7 @@ namespace ClinicManagementLibrary
         bool loginUser(string username, string password);
         List<Doctor> viewDoctorDetails();
 
-        bool validatePatientDetails(Patient p, string dob);
+        bool validatePatientDetails(Patient p);
         int addPatientDetails(Patient p,out int patientID);
 
         List<Patient> viewPatientDetails();
